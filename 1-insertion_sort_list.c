@@ -8,36 +8,41 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current = (*list)->next;
-
 	if (!list || !(*list) || !(*list)->next)
 		return;
 
-	while (current)
+	 listint_t = *current, *sorted, *temp;
+
+	 sorted = NULL;
+	 current = *list;
+
+	while (*list)
 	{
-		listint_t *prev = current->prev;
-		listint_t *next = current->next;
-		
-		while (prev && prev->n > current->n)
+		current= *list;
+		*list = (*list)->next;
+
+        /* Check if the new element should be inserted at the beginning */
+		if (sorted == NULL || current->n < sorted->n)
 		{
-			/* Swap the nodes */
-			if (next)
-				next->prev = prev;
+			current->next = sorted;
+			current->prev = NULL;
+			if (sorted)
 
-			if (prev->prev)
-				prev->prev->next = current;
-			else
-				*list = current;
-
-			prev->next = next;
-			current->prev = prev->prev;
-			prev->prev = current;
-			current->next = prev;
-
-			print_list(*list); /* Print the list after each swap */
-
-			prev = current->prev;
+				sorted->prev = current;
+			sorted = current;
 		}
-		current = next;
+		else
+		{
+			temp = sorted;
+			while (temp->next && current->n > temp->next->n)
+				temp = temp->next;
+
+			current->next = temp->next;
+			current->prev = temp;
+			if (temp->next)
+				temp->next->prev = current;
+			temp->next = current;
+		}
 	}
+	*list = sorted; /* Update the original list pointer*/ 
 }
